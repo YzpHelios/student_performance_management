@@ -56,10 +56,11 @@ pool.getConnection(function(err, connection) {
                 return;
             }
 
-            //connection.release();
+            
 
             console.log("用户数量查询成功");
-            callback(err,result);                     
+            callback(err,result);  
+            // connection.release();                  
         });        
     };
 
@@ -74,7 +75,7 @@ pool.getConnection(function(err, connection) {
                 return;
             }
 
-           // connection.release();
+            // connection.release();
 
             console.log("查询成功");
             callback(err,result);                     

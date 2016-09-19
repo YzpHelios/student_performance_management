@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><%= title %></title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/add_teacher.css">
+    <style type="text/css">
+    input[type="text"] {
+        margin-left: 28px;
+        width: 580px;
+    }
+    .input-append {
+        margin-top: 10px;
+    }
+    .table {
+        margin-left: 28px;
+        margin-top: 10px;
+        width: 94%;
+        border-top: 1px solid #DEDEDE;
+    }
+    .table tr td{
+        text-align: center;
+    }
+    #errorTip {
+        margin-left: 17px;
+    }
+    </style>
+</head>
+<body>
+	
+	<div class="container">
+		<div class="jumbotron">
+			<h1><%= title %></h1>
+			<h3>这里添加老师信息</h3>
+			<hr>
+			<a class="nav_top" href="/"><button type="button" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-eye-open"></span> 返回主页</button></a>
+			<a class="nav_top" href="/teacher"><button type="button" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-th-list"></span> 添加老师</button></a>
+            <div class="main-navbar">
+               <ul class="nav-pills">
+                    <li class="nav"><a href="#"><%= username %></a></li>
+                    <li class="nav"><a href="/logout">安全退出</a></li>
+                </ul>
+            </div> 
+		</div>
+		<% if (locals.success) { %> 
+        <div id="alt_sucess" class="alert alert-success"> 
+            <%- success %> 
+        </div> 
+       <% } %> 
+
+      <% if (locals.error) { %> 
+        <div id="alt_warning" class="alert alert-warning"> 
+          <%= error %> 
+        </div> 
+      <% } %> 
+		<div class="row" id="row">
+
+			<div class="col-lg-12">
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"><strong>按条件查找老师信息</strong></h3>
+					</div>
+                    <!-- 内容 -->
+					<div class="panel-body">
+                        <div class="input-append">
+                             <input class="span2" id="appendedInputButtons" type="text" placeholder="根据教师编号或姓名查找">
+                             <button class="btn btn-info btn-large" type="button" id="search">查找</button>
+                             <button class="btn btn-info btn-large" type="button" id="all">所有老师</button>
+                             <button class="btn btn-info btn-large" type="button">修改</button>
+                        </div>
+                        <div class="teacher_table">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>          
+                                        <td>教师编号</td>
+                                        <td>教师姓名</td>
+                                        <td>性别</td>
+                                        <td>E-mail</td>
+                                        <td>手机号</td>
+                                        <td>年龄</td>
+                                        <td>操作</td>
+                                    </tr>                        
+                                </thead>
+                                <tbody id="list">                                 
+
+                                </tbody>
+                            </table>
+                        </div>
+					</div>
+				</div>
+
+			</div>			
+		</div>
+	</div>
+
+    <script src="/javascripts/jquery.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+        String.prototype.format = function (args) {
+            var result = this;
+            if (arguments.length > 0) {
+                if (arguments.length == 1 && typeof (args) == "object") {
+                    for (var key in args) {
+                        if (args[key] != undefined) {
+                            var reg = new RegExp("({" + key + "})", "g");
+                            result = result.replace(reg, args[key]);
+                        }
+                    }
+                }
+                else {
+                    for (var i = 0; i < arguments.length; i++) {
+                        if (arguments[i] != undefined) {
+                            var reg = new RegExp("({)" + i + "(})", "g");
+                            result = result.replace(reg, arguments[i]);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+		    
+            $(search).on("click",function(){
+
+                var alltr = $("table tbody tr");
+                var errorTip = '<div id="errorTip" class="alert alert-warning">{0}</div> ';
+                var appendedInputButtons = $("#appendedInputButtons").val().trim();
+
+                appendedInputButtons = appendedInputButtons.replace(/\s+/g, '').toLowerCase();
+
+                var currentURL = window.location.origin;
+
+                if (alltr.length != 0) {
+                    alltr[0].remove();
+                }
+                if ($('#errorTip') != 0) {
+                    $('#errorTip').remove();
+                }
+    
+                $.post( currentURL + "/search_Teacher/search/" + appendedInputButtons,function(results){
+                    if (results == false) {
+                        $("#row").prepend(errorTip.format('未找到该老师'));  
+                    }else {
+                        for(var i = 0; i < results.length; i ++) {
+
+                            var list = $("<tr>");                           
+                            list.addClass('success');
+                            list.attr('id','list-' + i)
+                            $('#list').append(list);  
+                            $('#list-' + i).append("<td>" + results[i].tNo + "</td>");
+                            $('#list-' + i).append("<td>" + results[i].tName + "</td>");
+                            $('#list-' + i).append("<td>" + results[i].tSex + "</td>");
+                            $('#list-' + i).append("<td>" + results[i].E_mail + "</td>");
+                            $('#list-' + i).append("<td>" + results[i].tPhone + "</td>");
+                            $('#list-' + i).append("<td>" + results[i].tBirthday + "</td>");
+                            $('#list-' + i).append("<td><button class='btn' id='change'>修改</button><button class='btn' id='save'>保存</button><button class='btn' id='del'>删除</button></td>");                                                    
+                        }
+                        $(del).on("click",function(){
+                            $.post('currentURL' + "/search_Teacher/del/" + tNo,function(results){
+                                
+                            });
+                            var alltr = $("table tbody tr");
+                            var tNo = alltr.find("td:first-child").text();
+                            if (alltr.length != 0) {
+                                alltr[0].remove();
+                            }
+                        });  
+                    }
+                });
+                
+            });
+
+            
+
+
+	</script>
+	 
+</body>
+</html>

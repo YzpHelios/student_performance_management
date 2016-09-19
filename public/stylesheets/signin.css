@@ -60,3 +60,8 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
   border-color: rgba(82,168,236,0.8);
   color: #08c;
 }
+input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:focus {
+    -webkit-box-shadow: 0 0 6px #08c;
+    -moz-box-shadow: 0 0 6px #f8b9b7;
+    box-shadow: 0 0 6px #08c;
+}

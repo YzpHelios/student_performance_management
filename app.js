@@ -10,7 +10,8 @@ var routes = require('./routes/index');
 var reg = require('./routes/reg');
 var login = require('./routes/login');
 var logout = require('./routes/logout');
-var teacher = require('./routes/teacher')
+var teacher = require('./routes/teacher');
+var search_teacher = require('./routes/search_Teacher');
 
 var app = express();
 
@@ -25,7 +26,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser('Wilson'));
-app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }, resave: true, saveUninitialized: true }));
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 660000 }, resave: true, saveUninitialized: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
@@ -33,7 +34,7 @@ app.use('/reg',reg);
 app.use('/login',login);
 app.use('/logout',logout);
 app.use('/teacher',teacher);
-
+app.use('/search_Teacher',search_teacher);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

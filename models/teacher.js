@@ -56,7 +56,7 @@ pool.getConnection(function(err,connection){
 		});
 	};
 
-	 Teacher.getTeacherByTNO = function getTeacherByTNO(tNo,result) {
+	 Teacher.getTeacherByTNO = function getTeacherByTNO(tNo,callback) {
 	 	var getTeacherByTNO_Sql = "SELECT * FROM teacher WHERE tNo = ? ";
 
 	 	connection.query(getTeacherByTNO_Sql,[tNo],function(err,result){
@@ -69,5 +69,30 @@ pool.getConnection(function(err,connection){
 	 	});
 	 };
 
+	//根据教师编号或教师姓名查找教师
+	Teacher.getTeacherByTnoTname = function getTeacherByTnoTname(tNo,callback){
+		var getTeacherByTnoTname_Sql = "SELECT * FROM teacher WHERE tNo= ?";
+
+		connection.query(getTeacherByTnoTname_Sql,[tNo],function(err,result){
+			if (err) {
+				console.log("getTeacherByTnoTname_Sql Error:" + err.message);
+				return;
+			}
+			console.log("跟据教师编号或姓名查找教师成功");
+			callback(err,result);
+		});
+	};
+
+	Teacher.delTeacher = function delTeacher(tNo,callback){
+		var delTeacher_Sql = "DELECT FROM teacher WHERE tNo =?";
+		connection.query(delTeacher_Sql,[tNo],function(err,result){
+			if (err) {
+				console.log("delTeacher_Sql Error:" + err.message);
+				return;
+			}
+			console.log("删除该老师记录");
+			callback(err,result);
+		});
+	};
 
 });
