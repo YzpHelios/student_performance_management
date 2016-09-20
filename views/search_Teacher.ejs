@@ -158,16 +158,24 @@
                             $('#list-' + i).append("<td>" + results[i].tBirthday + "</td>");
                             $('#list-' + i).append("<td><button class='btn' id='change'>修改</button><button class='btn' id='save'>保存</button><button class='btn' id='del'>删除</button></td>");                                                    
                         }
+                        // 点击按钮删除老师记录
                         $(del).on("click",function(){
-                            $.post('currentURL' + "/search_Teacher/del/" + tNo,function(results){
-                                
-                            });
                             var alltr = $("table tbody tr");
                             var tNo = alltr.find("td:first-child").text();
+                            tNo = tNo.replace(/\s+/g, '').toLowerCase();
+                            $.post(currentURL + "/search_Teacher/del/" + tNo,function(results){
+                                
+                            });
+                             
                             if (alltr.length != 0) {
                                 alltr[0].remove();
                             }
                         });  
+                        
+                        // 点击修改按钮将表格内容变为可编辑
+                        $(change).on("click",function(){
+                            
+                        });
                     }
                 });
                 

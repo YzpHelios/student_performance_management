@@ -84,7 +84,7 @@ pool.getConnection(function(err,connection){
 	};
 
 	Teacher.delTeacher = function delTeacher(tNo,callback){
-		var delTeacher_Sql = "DELECT FROM teacher WHERE tNo =?";
+		var delTeacher_Sql = "DELETE FROM teacher WHERE tNo =?";
 		connection.query(delTeacher_Sql,[tNo],function(err,result){
 			if (err) {
 				console.log("delTeacher_Sql Error:" + err.message);

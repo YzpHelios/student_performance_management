@@ -57,7 +57,7 @@ router.post('/del/:tNo?',function(req,res){
 				return;
 			}
 			else{
-				console.log(results);
+				console.log(results.affectedRows);
 				res.json(results);
 			}
 		});
